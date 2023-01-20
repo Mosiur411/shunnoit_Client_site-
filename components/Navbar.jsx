@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import React, { useState } from 'react'
 
-export default function AdminNavbar() {
+export default function Navbar() {
     return (
         <header className="py-1 bg-[#124d9d] shadow  z-10 sticky top-0">
             <div className="flex items-center max-w-screen-xl mx-auto px-2">
