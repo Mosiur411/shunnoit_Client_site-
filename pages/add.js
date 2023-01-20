@@ -1,12 +1,16 @@
 import Head from 'next/head';
 import React, { useState } from 'react'
-
-
+import { useDispatch, useSelector } from 'react-redux';
+import { productAdd } from '../app/features/ProductSlice';
 
 export default function add() {
+    const product = useSelector((state) => state.product.product)
+    
+    const dispatch = useDispatch()
+
+
 
     const [inputs, setInputs] = useState({});
-
     const handleChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
@@ -17,7 +21,11 @@ export default function add() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (inputs) {
-            console.log(inputs)
+            dispatch(productAdd(inputs))
+            var arr = JSON.parse(localStorage.getItem("data"))
+            if (arr == null) arr = [];
+            arr.push(inputs);
+            localStorage.setItem("data", JSON.stringify(arr));
         }
     }
 

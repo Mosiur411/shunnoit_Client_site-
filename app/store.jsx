@@ -1,11 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { ProductControl } from './features/api/ProductControl';
-
+import ProductSlice from './features/ProductSlice';
 const store = configureStore({
     reducer: {
-        [ProductControl.reducerPath]: ProductControl.reducer
+        product: ProductSlice
     },
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(ProductControl.middleware)
 
 })
 export default store;

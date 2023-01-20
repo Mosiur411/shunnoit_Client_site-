@@ -1,5 +1,18 @@
 import Head from 'next/head'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { productAdd } from '../app/features/ProductSlice'
 export default function Home() {
+  const product = useSelector((state) => state.product.product)
+  console.log(product)
+  const dispatch = useDispatch()
+  useEffect(() => {
+    var arr = JSON.parse(localStorage.getItem("data"));
+    if (arr) {
+      dispatch(productAdd([...arr]))
+    }
+  }, [])
+
   return (
     <>
       <Head>
@@ -19,12 +32,12 @@ export default function Home() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 border-t border-gray-100">
-              <tr className="hover:bg-gray-50">
+              {product?.map(data => <tr className="hover:bg-gray-50">
                 <td className="px-6 py-4">
-                  <p>  Name</p>
+                  <p>{data?.title}</p>
                 </td>
                 <td className="px-6 py-4">
-                  <p>  Name</p>
+                  <p>{data?.description}</p>
                 </td>
                 <td className="px-6 py-4">
                   <div className='flex gap-4'>
@@ -65,7 +78,8 @@ export default function Home() {
                     </button>
                   </div>
                 </td>
-              </tr>
+              </tr>)}
+
             </tbody>
           </table>
         </div>
