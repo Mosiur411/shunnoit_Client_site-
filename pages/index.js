@@ -20,9 +20,28 @@ export default function Home() {
     if (index => 0) {
       setUpdateData(true)
       setUpdateDataValuePass(index)
-      toast('Delete')
+
     }
   }
+  const deleteHandle = (index) => {
+    dispatch(productDelete(index))
+    toast("Delete")
+  }
+
+  {/* =============== presentation Handel ===============  */ }
+  const [presentation, setPresentation] = useState(5)
+  const [PreviousPresentation, setPreviousPresentation] = useState(0)
+  const presentationNext = () => {
+    setPreviousPresentation(presentation)
+    setPresentation(presentation + 5)
+  }
+  const presentationPrevious = () => {
+    // setPreviousPresentation(presentation - PreviousPresentation || 0)
+    // setPresentation(presentation - PreviousPresentation)
+  }
+
+
+
   return (
     <>
       <Head>
@@ -42,7 +61,7 @@ export default function Home() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 border-t border-gray-100">
-              {product?.map((data, index) => <tr className="hover:bg-gray-50">
+              {product?.slice(PreviousPresentation, presentation).map((data, index) => <tr className="hover:bg-gray-50">
                 <td className="px-6 py-4">
                   <p>{data?.title}</p>
                 </td>
@@ -51,7 +70,7 @@ export default function Home() {
                 </td>
                 <td className="px-6 py-4">
                   <div className='flex gap-4'>
-                    <button onClick={() => dispatch(productDelete(index))} x-data="{ tooltip: 'Delete' }" >
+                    <button onClick={() => deleteHandle(index)} x-data="{ tooltip: 'Delete' }" >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -93,7 +112,15 @@ export default function Home() {
             </tbody>
           </table>
         </div>
+
+        {/* =============== presentation ===============  */}
+
+        <div className='flex justify-center items-center gap-10'>
+          <button onClick={() => presentationPrevious()} className={`${PreviousPresentation ? "block" : "hidden"} px-4 py-2 font-medium text-gray-100 bg-blue-600 rounded shadow hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-700`}>Previous</button>
+          <button onClick={() => presentationNext()} className="px-4 py-2 font-medium text-gray-100 bg-blue-600 rounded shadow hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-700">Next</button>
+        </div>
       </main>}
+
       {/* update value  */}
       {UpdateData && <UpdateValue index={UpdateDataValuePass} UpdateData={UpdateData} setUpdateData={setUpdateData} />}
     </>
