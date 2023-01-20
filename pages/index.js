@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { productAdd } from '../app/features/ProductSlice'
+import { productAdd, productDelete } from '../app/features/ProductSlice'
 export default function Home() {
   const product = useSelector((state) => state.product.product)
   console.log(product)
@@ -32,7 +32,7 @@ export default function Home() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 border-t border-gray-100">
-              {product?.map(data => <tr className="hover:bg-gray-50">
+              {product?.map((data, index) => <tr className="hover:bg-gray-50">
                 <td className="px-6 py-4">
                   <p>{data?.title}</p>
                 </td>
@@ -41,7 +41,7 @@ export default function Home() {
                 </td>
                 <td className="px-6 py-4">
                   <div className='flex gap-4'>
-                    <button x-data="{ tooltip: 'Delete' }" >
+                    <button onClick={() => dispatch(productDelete(index))} x-data="{ tooltip: 'Delete' }" >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
