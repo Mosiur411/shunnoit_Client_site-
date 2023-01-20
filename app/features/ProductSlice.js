@@ -35,10 +35,21 @@ export const ProductSlice = createSlice({
                     product: state.product.filter((dt, index) => index !== action.payload),
                 }
             }
-        }
+        },
+        productUpdate: (state, action) => {
 
-
+            if (action?.payload) {
+                var arr = JSON.parse(localStorage.getItem("data"))
+                arr[action?.payload.index] = { title: action?.payload.title || arr[action?.payload.index]?.title, description: action.payload?.description || arr[action?.payload.index]?.description };
+                localStorage.setItem("data", JSON.stringify(arr));
+                if (arr) {
+                    return {
+                        product: [...arr]
+                    }
+                }
+            }
+        },
     },
 })
-export const { productAdd, productDelete } = ProductSlice.actions
+export const { productAdd, productDelete, productUpdate } = ProductSlice.actions
 export default ProductSlice.reducer

@@ -1,10 +1,14 @@
 import Head from 'next/head'
-import { useEffect } from 'react'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
 import { productAdd, productDelete } from '../app/features/ProductSlice'
+import UpdateValue from '../components/UpdateValue'
 export default function Home() {
   const product = useSelector((state) => state.product.product)
-  console.log(product)
+  const [UpdateData, setUpdateData] = useState(false)
+  const [UpdateDataValuePass, setUpdateDataValuePass] = useState()
   const dispatch = useDispatch()
   useEffect(() => {
     var arr = JSON.parse(localStorage.getItem("data"));
@@ -12,7 +16,13 @@ export default function Home() {
       dispatch(productAdd([...arr]))
     }
   }, [])
-
+  const UpdateDataValue = (index) => {
+    if (index => 0) {
+      setUpdateData(true)
+      setUpdateDataValuePass(index)
+      toast('Delete')
+    }
+  }
   return (
     <>
       <Head>
@@ -21,7 +31,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
+      {!UpdateData && <main>
         <div className="overflow-hidden rounded-lg border border-gray-200 shadow-md m-5">
           <table className="w-full border-collapse bg-white text-left text-sm text-gray-500">
             <thead className="bg-gray-50">
@@ -58,7 +68,7 @@ export default function Home() {
                         />
                       </svg>
                     </button>
-                    <button x-data="{ tooltip: 'Edite' }" >
+                    <button onClick={() => UpdateDataValue(index)} x-data="{ tooltip: 'Edite' }" >
 
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -83,9 +93,9 @@ export default function Home() {
             </tbody>
           </table>
         </div>
-
-
-      </main>
+      </main>}
+      {/* update value  */}
+      {UpdateData && <UpdateValue index={UpdateDataValuePass} UpdateData={UpdateData} setUpdateData={setUpdateData} />}
     </>
   )
 }

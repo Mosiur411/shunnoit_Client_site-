@@ -1,16 +1,12 @@
-import Head from 'next/head';
+import Head from 'next/head'
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
-import { productAdd } from '../app/features/ProductSlice';
+import { useDispatch, useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
+import { productUpdate } from '../app/features/ProductSlice'
 
-export default function add() {
+export default function UpdateValue({ index, setUpdateData, UpdateData }) {
     const product = useSelector((state) => state.product.product)
-
     const dispatch = useDispatch()
-
-
-
     const [inputs, setInputs] = useState({});
     const handleChange = (event) => {
         const name = event.target.name;
@@ -18,18 +14,21 @@ export default function add() {
         setInputs(values => ({ ...values, [name]: value }))
     }
 
-
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (inputs) {
-            dispatch(productAdd(inputs))
-            var arr = JSON.parse(localStorage.getItem("data"))
-            if (arr == null) arr = [];
-            arr.push(inputs);
-            localStorage.setItem("data", JSON.stringify(arr));
-            toast('AddProduct')
+            const data = { ...inputs, index: index }
+            if (data?.index >= 0 && (data?.title || data?.description)) {
+                dispatch(productUpdate(data))
+                setUpdateData(!UpdateData)
+                toast('Update')
+            }
         }
     }
+
+
+
+
 
     return (
         <>
@@ -42,37 +41,38 @@ export default function add() {
             <main>
                 <div className="justify-center flex-1 max-w-2xl px-4  mx-auto ">
                     <h2 className="pb-2 text-xl font-bold text-center text-gray-800 md:text-3xl dark:text-gray-300">
-                        Todo From
+                        Todo From Update
                     </h2>
                     <div className="px-3 py-6 rounded shadow-md dark:bg-gray-700 bg-gray-500">
                         <form onSubmit={handleSubmit} className="" id="myForm">
                             <div className="w-full px-3 mb-3">
                                 <label htmlFor="Title"
-                                    className="block mb-2 font-bold text-gray-700 uppercase dark:text-gray-400">
+                                    className="block mb-2 font-bold text-black">
                                     Title
                                 </label>
-                                <input type="text" id='Title' placeholder="title..."
+                                <input type="text" id='Title'
                                     name="title"
-                                    value={inputs.title || ""}
+                                    value={inputs.title || ``}
+                                    placeholder={product[index]?.title}
                                     onChange={handleChange}
-                                    required
-                                    className="block w-full px-4 py-3 mb-3 leading-tight text-gray-700 bg-gray-100 border rounded lg:mb-0 dark:text-gray-400 dark:border-gray-800 dark:bg-gray-800 " />
+                                    // required
+                                    className="block w-full px-4 py-3 mb-3 leading-tight text-black bg-gray-100 border rounded lg:mb-0 dark:text-gray-400 dark:border-gray-800 dark:bg-gray-800 " />
                             </div>
                             <div className="w-full px-3 mb-3">
                                 <label htmlFor="Description"
                                     className="block mb-2 font-bold text-gray-700 uppercase dark:text-gray-400">
                                     Description
                                 </label>
-                                <input type="text" id='Description' placeholder="description..."
+                                <input type="text" id='Description' placeholder={product[index]?.description}
                                     name="description"
                                     value={inputs.description || ""}
                                     onChange={handleChange}
-                                    required
+                                    // required
                                     className="block w-full px-4 py-3 mb-3 leading-tight text-gray-700 bg-gray-100 border rounded lg:mb-0 dark:text-gray-400 dark:border-gray-800 dark:bg-gray-800 " />
                             </div>
                             <div className="px-3">
                                 <button
-                                    className="px-4 py-2 font-medium text-gray-100 bg-blue-600 rounded shadow hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-700">
+                                    className={`px-4 py-2 font-medium text-gray-100 bg-blue-600 rounded shadow hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-700`}>
                                     Send
                                 </button>
                             </div>
